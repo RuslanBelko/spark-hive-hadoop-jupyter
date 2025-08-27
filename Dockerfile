@@ -67,6 +67,10 @@ ENV PATH=$PATH:$HIVE_HOME/bin
 # nano $HIVE_HOME/conf/hive-site.xml открывает файл конфигурации в редакторе
 # здесь в теории нужно менять hive.metastore.warehouse.dir
 
+# создаём локальную папку для hive metastore и открываем её для редактирования любым пользователем
+RUN sudo mkdir -p /user/hive/warehouse
+RUN sudo chmod 777 /user/hive/warehouse
+
 # инициализируем схему метаданных
 WORKDIR $HIVE_HOME
 RUN bin/schematool -dbType derby -initSchema
@@ -77,6 +81,8 @@ RUN sudo apt install scala git -y
 RUN wget https://dlcdn.apache.org/spark/spark-3.5.6/spark-3.5.6-bin-hadoop3.tgz
 RUN tar xvf spark-*.tgz
 RUN sudo mv spark-3.5.6-bin-hadoop3 /opt/spark
+RUN cp /opt/spark/conf/spark-env.sh.template /opt/spark/conf/spark-env.sh
+RUN echo 'export SPARK_MASTER_HOST=localhost' >> /opt/spark/conf/spark-env.sh
 
 # настраиваем переменные окружения для spark
 ENV SPARK_HOME=/opt/spark
@@ -97,7 +103,10 @@ RUN rm $HOME_DIR/hadoop-3.4.1.tar.gz && \
     rm $HOME_DIR/apache-hive-4.0.1-bin.tar.gz && \
     rm $HOME_DIR/spark-3.5.6-bin-hadoop3.tgz
 
-EXPOSE 10000 10002 8080
+RUN sudo mkdir $HOME_DIR/Jupyter_notebooks
+COPY Jupyter_notebooks $HOME_DIR/Jupyter_notebooks
+
+EXPOSE 10000 10002 8080 8888
 
 # копируем sh скрипт, который запускает все необходимые программы в нашем контейнере
 COPY entrypoint.sh $HOME_DIR
