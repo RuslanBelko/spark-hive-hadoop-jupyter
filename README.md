@@ -59,6 +59,15 @@ bin/beeline -n hive -u jdbc:hive2://localhost:10000
 
 ## Запуск Jupyter Notebook
 
+Важный момент: spark установлен в контейнере без использования Pyspark. Чтобы получить к нему доступ из ноутбука, нужно использовать следующие команды:
+<pre>
+    <code>
+import findspark
+findspark.init()
+import pyspark # не нужно отдельно устанавливать с помощью pip install
+    </code>
+</pre>
+
 1. Открываем терминал
 2. Логинимся в контейнере:
 <pre>
