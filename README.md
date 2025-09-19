@@ -17,7 +17,8 @@ git clone https://github.com/RuslanBelko/spark-hive-hadoop-jupyter.git
 1. Открываем терминал и там переходим в скопированный каталог: `cd /path/to/copied/catalog`
 2. `docker build -t spark-hive-hadoop-jupyter .`
 3. Дожидаемся, пока образ соберётся
-4. Запускаем наш контейнер
+4. Необязательно, но очень важно: в папке с файлами находится файл entrypoint.sh - убедитесь, что окончания строк в файле имеют UNIX-формат (LF). Это можно сделать, например, с помощью Notepad++
+5. Запускаем наш контейнер
 <pre>
     <code>
 docker run -d -p 9870:9870 -p 9864:9864 -p 8088:8088 -p 10000:10000 -p 10002:10002 -p 8080:8080 -p 8888:8888 --name spark-hive-hadoop-jupyter-container spark-hive-hadoop-jupyter:latest
